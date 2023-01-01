@@ -9,7 +9,7 @@ import Progress from "./components/Progress";
 import Header from "./components/Header";
 
 const MarketingLazy = lazy(() => import("./components/MarketingApp"));
-const AuthLazy = lazy(() => import("./components/AuthApp"));
+const AuthLazy = lazy(() => import("./components/AuthApp.js"));
 
 const generateClassName = createGenerateClassName({
   productionPrefix: "co",
