@@ -8,6 +8,9 @@ import {
 import Progress from "./components/Progress";
 import Header from "./components/Header";
 
+// import MarketingApp from "./components/MarketingApp";
+// import AuthApp from "./components/AuthApp";
+
 const MarketingLazy = lazy(() => import("./components/MarketingApp"));
 const AuthLazy = lazy(() => import("./components/AuthApp.js"));
 
@@ -26,6 +29,7 @@ export default () => {
             isSignedIn={isSignedIn}
             onSignOut={() => setIsSignedIn(false)}
           />
+
           <Suspense fallback={<Progress />}>
             <Switch>
               <Route path="/auth">
