@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -11,19 +11,6 @@ import Container from "@material-ui/core/Container";
 import MaterialLink from "@material-ui/core/Link";
 import { Link } from "react-router-dom";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <MaterialLink component={Link} to="/" color="inherit">
-        Your Website
-      </MaterialLink>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
 const useStyles = makeStyles((theme) => ({
   "@global": {
     a: {
@@ -34,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   heroContent: {
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.primary.dark,
     padding: theme.spacing(8, 0, 6),
   },
   heroButtons: {
@@ -51,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
   cardMedia: {
     paddingTop: "56.25%", // 16:9
+    objectFit: "",
   },
   cardContent: {
     flexGrow: 1,
@@ -61,17 +49,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
 export default function Album() {
-  const classes = useStyles();
+  const url = "https://imdb-top-100-movies.p.rapidapi.com/";
 
+  const options = {
+    method: "GET",
+    headers: {
+      "X-RapidAPI-Key": "d8d4f93b5amsh199e523cd275a6ap1369d9jsnaf4172463f6e",
+      "X-RapidAPI-Host": "imdb-top-100-movies.p.rapidapi.com",
+    },
+  };
+  const classes = useStyles();
+  const [movies, setMovies] = useState([]);
+
+  useEffect(async () => {
+    await fetch(url, options)
+      .then((res) => res.json())
+      .then((json) => setMovies(json))
+      .catch((err) => console.error("error:" + err));
+  }, []);
+
+  console.log(movies);
   return (
     <React.Fragment>
       <main>
-        {/* Hero unit */}
         <div className={classes.heroContent}>
-          <Container maxWidth="sm">
+          <Container maxWidth="md">
             <Typography
               component="h1"
               variant="h2"
@@ -79,7 +82,7 @@ export default function Album() {
               color="textPrimary"
               gutterBottom
             >
-              Home Page
+              FIMDB
             </Typography>
             <Typography
               variant="h5"
@@ -87,56 +90,34 @@ export default function Album() {
               color="textSecondary"
               paragraph
             >
-              Something short and leading about the collection below—its
-              contents, the creator, etc. Make it short and sweet, but not too
-              short so folks don&apos;t simply skip over it entirely.
+              Find best movies ever
             </Typography>
-            <div className={classes.heroButtons}>
-              <Grid container spacing={2} justifyContent="center">
-                <Grid item>
-                  <Link to="/pricing">
-                    <Button variant="contained" color="primary">
-                      Pricing
-                    </Button>
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link to="/pricing">
-                    <Button variant="outlined" color="primary">
-                      Pricing
-                    </Button>
-                  </Link>
-                </Grid>
-              </Grid>
-            </div>
           </Container>
         </div>
         <Container className={classes.cardGrid} maxWidth="md">
-          {/* End hero unit */}
           <Grid container spacing={4}>
-            {cards.map((card) => (
+            {movies.map((card) => (
               <Grid item key={card} xs={12} sm={6} md={4}>
                 <Card className={classes.card}>
                   <CardMedia
                     className={classes.cardMedia}
-                    image="https://source.unsplash.com/random"
-                    title="Image title"
+                    image={card.image}
+                    title={card.title}
                   />
                   <CardContent className={classes.cardContent}>
+                    <Typography
+                      gutterBottom
+                      variant="h5"
+                      component="h2"
+                    ></Typography>
                     <Typography gutterBottom variant="h5" component="h2">
-                      Heading
+                      {card.title} {card.year}
                     </Typography>
-                    <Typography>
-                      This is a media card. You can use this section to describe
-                      the content.
-                    </Typography>
+                    <Typography color="textPrimary">{card.rating}</Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small" color="primary">
-                      View
-                    </Button>
-                    <Button size="small" color="primary">
-                      Edit
+                    <Button size="small" color="secondary">
+                      See More
                     </Button>
                   </CardActions>
                 </Card>
@@ -145,22 +126,6 @@ export default function Album() {
           </Grid>
         </Container>
       </main>
-      {/* Footer */}
-      <footer className={classes.footer}>
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="textSecondary"
-          component="p"
-        >
-          Something here to give the footer a purpose!
-        </Typography>
-        <Copyright />
-      </footer>
-      {/* End footer */}
     </React.Fragment>
   );
 }
