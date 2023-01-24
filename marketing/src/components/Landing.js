@@ -17,11 +17,8 @@ const useStyles = makeStyles((theme) => ({
       textDecoration: "none",
     },
   },
-  icon: {
-    marginRight: theme.spacing(2),
-  },
   heroContent: {
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: theme.palette.warning.light,
     padding: theme.spacing(8, 0, 6),
   },
   heroButtons: {
@@ -37,15 +34,12 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
   },
   cardMedia: {
-    paddingTop: "56.25%", // 16:9
-    objectFit: "",
+    paddingTop: "56.25%",
+    flex: 1,
+    backgroundSize: "100%",
   },
   cardContent: {
-    flexGrow: 1,
-  },
-  footer: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(6),
+    flex: 1,
   },
 }));
 
@@ -94,9 +88,9 @@ export default function Album() {
             </Typography>
           </Container>
         </div>
-        <Container className={classes.cardGrid} maxWidth="md">
+        <Container className={classes.cardGrid} maxWidth="lg">
           <Grid container spacing={4}>
-            {movies.map((card) => (
+            {movies.map((card, index) => (
               <Grid item key={card} xs={12} sm={6} md={4}>
                 <Card className={classes.card}>
                   <CardMedia
@@ -105,18 +99,15 @@ export default function Album() {
                     title={card.title}
                   />
                   <CardContent className={classes.cardContent}>
-                    <Typography
-                      gutterBottom
-                      variant="h5"
-                      component="h2"
-                    ></Typography>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      {card.title} {card.year}
+                    <Typography gutterBottom variant="h5" component="h5">
+                      {`${index + 1}-`} {card.title} {card.year}
                     </Typography>
-                    <Typography color="textPrimary">{card.rating}</Typography>
+                    <Typography color="textPrimary">
+                      {card.rating} points
+                    </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small" color="secondary">
+                    <Button size="medium" color="secondary">
                       See More
                     </Button>
                   </CardActions>
